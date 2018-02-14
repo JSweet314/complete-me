@@ -1,17 +1,18 @@
 {
-  "name": "TDD",
+  "name": "Prefix Trie",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple prefix trie which may be used for an 'auto-complete' feature",
   "main": "index.js",
   "directories": {
+    "lib": "lib",
     "test": "tests"
   },
   "scripts": {
     "test": "mocha --reporter nyan --compilers js:babel-core/register tests",
     "eslint": "./node_modules/eslint/bin/eslint.js ./lib/*.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["prefix","trie"],
+  "author": "Jonathan Sweet",
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.22.2",
