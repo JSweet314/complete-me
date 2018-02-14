@@ -43,9 +43,9 @@ describe('Trie', () => {
       completion.insert('dog');
       completion.insert('dogs');
 
-      expect(completion.children['p'].children['i'].children['z']).to.exist
-      expect(completion.children['p'].children['i'].children['a']).to.exist
-      expect(completion.children['d'].children['o'].children['g'].endOfWord).to.eql(1);
+      expect(completion.children['p'].children['i'].children['z']).to.exist;
+      expect(completion.children['p'].children['i'].children['a']).to.exist;
+      expect(completion.children['d'].children['o'].children['g'].endOfWord).to.be.true;
     })
 
     it('should not add words to the trie if they already exist', () => {
@@ -54,12 +54,12 @@ describe('Trie', () => {
       completion.insert('pizza');
 
       expect(completion.count).to.eql(1);
-      expect(completion.findLastNode('pizza').endOfWord).to.eql(1);
+      expect(completion.findLastNode('pizza').endOfWord).to.eql(true);
 
       completion.insert('pizza');
 
       expect(completion.count).to.eql(1);
-      expect(completion.findLastNode('pizza').endOfWord).to.eql(1);
+      expect(completion.findLastNode('pizza').endOfWord).to.eql(true);
     })
   })
 
@@ -149,8 +149,7 @@ describe('Trie', () => {
       suggestions = completion.suggest('pi');
 
       expect(suggestions).to.eql(['piano', 'pizzas']);
-      expect(completion.findLastNode('pizza').endOfWord).to.eql(0);
+      expect(completion.findLastNode('pizza').endOfWord).to.eql(false);
     })
   })
 })
-

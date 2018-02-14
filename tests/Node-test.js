@@ -12,7 +12,7 @@ describe('Node', () => {
   })
 
   it('should be able track if it is the last letter of a word in the trie',() => {
-    expect(node.endOfWord).to.eql(0);
+    expect(node.endOfWord).to.eql(false);
   })
 
   it('should be able to store child nodes', () => {
