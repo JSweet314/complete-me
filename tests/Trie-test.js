@@ -136,11 +136,13 @@ describe('Trie', () => {
   })
 
   describe('DELETE', () => {
-    it('should remove a word from the suggested words array', () => {
-      completion.insert('piano');
-      completion.insert('pizza');
-      completion.insert('pizzas');
+    beforeEach(() => {
+     completion.insert('piano');
+     completion.insert('pizza');
+     completion.insert('pizzas');
+   })
 
+    it('should remove a word from the suggested words array', () => {
       let suggestions = completion.suggest('pi');
 
       expect(suggestions).to.eql(['piano', 'pizza', 'pizzas']);
@@ -150,6 +152,14 @@ describe('Trie', () => {
 
       expect(suggestions).to.eql(['piano', 'pizzas']);
       expect(completion.findLastNode('pizza').endOfWord).to.eql(false);
+    })
+
+    it('should decrement the tries count', () => {
+      expect(completion.count).to.eql(3);
+
+      completion.delete('pizza');
+
+      expect(completion.count).to.eql(2);
     })
   })
 })
