@@ -11,11 +11,11 @@ describe('Node', () => {
     expect(node).to.exist;
   })
 
-  it('should be able track if a word is complete at a given node',() => {
-    expect(node.completeWord).to.eql(0);
+  it('should be able track if it is the last letter of a word in the trie',() => {
+    expect(node.endOfWord).to.eql(0);
   })
 
   it('should be able to store child nodes', () => {
-    expect(node.children).to.deep.equal({});
+    expect(node.children).to.eql({});
   })
 })

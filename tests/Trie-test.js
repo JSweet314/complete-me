@@ -11,103 +11,127 @@ describe('Trie', () => {
   })
 
   it('should instantiate our good friend Trie', () => {
-    expect(completion).to.exist;
-    expect(completion).to.be.an.instanceOf(Trie);
-  });
-
-  it('should track the number of words in the Trie', () => {
-    expect(completion.numberOfWords).to.equal(0);
+    expect(completion).to.exist.and.be.an.instanceOf(Trie);
   })
 
   it('should store child nodes', () => {
     expect(completion.children).to.eql({});
   })
 
+  it('should track the number of words in the Trie', () => {
+    expect(completion._count).to.eql(0);
+  })
+
   describe('COUNT', () => {
     it('should return the number of words in the trie', () => {
-      completion.insert('pizza');
-      expect(completion.count()).to.equal(1);
+      expect(completion.count).to.eql(0);
     })
   })
 
   describe('INSERT', () => {
     it('should increment the number of words', () => {
+      expect(completion.count).to.eql(0);
+
       completion.insert('pizza');
-      expect(completion.count()).to.eq(1);
+
+      expect(completion.count).to.eql(1);
     })
 
-    it('should add the word to the trie if it doesn\'t yet exist', () => {
+    it('should add words to the trie', () => {
       completion.insert('pizza');
-      completion.insert('pizzas');
       completion.insert('piano');
       completion.insert('dog');
       completion.insert('dogs');
-      expect(completion.children['p']).to.exist
-      expect(completion.children['p'].children['i']).to.exist
-      expect(completion.children['d'].children['o'].children['g'].completeWord).to.equal(1);
+
+      expect(completion.children['p'].children['i'].children['z']).to.exist
+      expect(completion.children['p'].children['i'].children['a']).to.exist
+      expect(completion.children['d'].children['o'].children['g'].endOfWord).to.eql(1);
+    })
+
+    it('should not add words to the trie if they already exist', () => {
+      expect(completion.count).to.eql(0);
+
+      completion.insert('pizza');
+
+      expect(completion.count).to.eql(1);
+      expect(completion.findLastNode('pizza').endOfWord).to.eql(1);
+
+      completion.insert('pizza');
+
+      expect(completion.count).to.eql(1);
+      expect(completion.findLastNode('pizza').endOfWord).to.eql(1);
+    })
+  })
+
+  describe('findLastNode', () => {
+    it('should return the node corresponding to the last letter of a string', () => {
+      completion.insert('pizza');
+
+      expect(completion.findLastNode('pi')).to.exist.and.be.an.instanceOf(Node);
+
+      const childrenKeys = Object.keys(completion.findLastNode('pi').children);
+      expect(childrenKeys).to.eql(['z']);
+      expect(completion.findLastNode('pi').children.z).to.exist.and.be.an.instanceOf(Node);
     })
   })
 
   describe('SUGGEST', () => {
-    beforeEach(() => {
+    it('should return an array of words matching a provided prefix', () => {
       completion.insert('piano');
       completion.insert('pizza');
       completion.insert('pizzas');
       completion.insert('dog');
-    })
+      completion.insert('dogs');
 
-    it('should return an array of suggested words', () => {
       let results = completion.suggest('pi');
 
-      let check1 = results.some(result => result === 'pizza');
-      let check2 = results.some(result => result === 'pizzas');
-      let check3 = results.some(result => result === 'piano');
-      let check4 = results.some(result => result === 'dog');
+      expect(results).to.eql(['piano', 'pizza', 'pizzas']);
 
-      expect(check1).to.be.true;
-      expect(check2).to.be.true;
-      expect(check3).to.be.true;
-      expect(check4).to.be.false;
+      results = completion.suggest('dog');
 
-      let results2 = completion.suggest('p');
-      let checkv1 = results2.some(result => result === 'pizza');
-      let checkv2 = results2.some(result => result === 'pizzas');
-      let checkv3 = results2.some(result => result === 'piano');
-      let checkv4 = results2.some(result => result === 'dog');
+      expect(results).to.eql(['dog', 'dogs']);
+    });
 
-      expect(checkv1).to.be.true;
-      expect(checkv2).to.be.true;
-      expect(checkv3).to.be.true;
-      expect(checkv4).to.be.false;
+    it('should return null if no match is found', () => {
+      completion.insert('piano');
+
+      expect(completion.suggest('z')).to.be.null;
     })
   })
 
   describe('POPULATE', () => {
     it('should add an array of words to the trie', () => {
       completion.populate(['this', 'is', 'a', 'sentence']);
-      expect(completion.count()).to.eq(4);
-    });
+
+      expect(completion.count).to.eql(4);
+      expect(completion.suggest('sentence')).to.eql(['sentence']);
+    })
 
     it('should be able to add a large array of words', () => {
       const text = "/usr/share/dict/words";
       const dictionary = fs.readFileSync(text).toString().trim().split('\n');
+
       completion.populate(dictionary);
-      expect(completion.count()).to.eq(235886);
-    });
+
+      expect(completion.count).to.eql(235886);
+      expect(completion.suggest('xylophone')).to.eql(['xylophone']);
+    })
   })
 
   describe('SELECT', () => {
-    it('should move selected words to the front of the array', () => {
+    it('should move selected words to the front of the suggestions array', () => {
       completion.insert('piano');
       completion.insert('pizza');
       completion.insert('pizzas');
-      completion.insert('dog');
-      let result = completion.suggest('pi');
-      expect(result[0]).to.equal('piano');
-      completion.select('pizza');
-      result = completion.suggest('pi');
-      expect(result[0]).to.equal('pizza');
 
+      let suggestions = completion.suggest('pi');
+
+      expect(suggestions[0]).to.eql('piano');
+
+      completion.select('pizza');
+      suggestions = completion.suggest('pi');
+
+      expect(suggestions[0]).to.eql('pizza');
     })
   })
 
@@ -116,12 +140,16 @@ describe('Trie', () => {
       completion.insert('piano');
       completion.insert('pizza');
       completion.insert('pizzas');
-      completion.insert('dog');
-      let result = completion.suggest('pi');
-      expect(result).to.eql(['piano', 'pizza', 'pizzas']);
+
+      let suggestions = completion.suggest('pi');
+
+      expect(suggestions).to.eql(['piano', 'pizza', 'pizzas']);
+
       completion.delete('pizza');
-      result = completion.suggest('pi');
-      expect(result).to.eql(['piano', 'pizzas']);
+      suggestions = completion.suggest('pi');
+
+      expect(suggestions).to.eql(['piano', 'pizzas']);
+      expect(completion.findLastNode('pizza').endOfWord).to.eql(0);
     })
   })
 })
