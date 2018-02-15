@@ -95,7 +95,7 @@ describe('Trie', () => {
     it('should return null if no match is found', () => {
       completion.insert('piano');
 
-      expect(completion.suggest('z')).to.be.null;
+      expect(completion.suggest('z')).to.eql([]);
     })
   })
 
