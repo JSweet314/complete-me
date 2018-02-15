@@ -43,6 +43,7 @@ describe('Trie', () => {
       completion.insert('dog');
       completion.insert('dogs');
 
+      expect(Object.keys(completion.children)).to.eql(['p', 'd']);
       expect(completion.children['p'].children['i'].children['z']).to.exist;
       expect(completion.children['p'].children['i'].children['a']).to.exist;
       expect(completion.children['d'].children['o'].children['g'].endOfWord).to.be.true;
