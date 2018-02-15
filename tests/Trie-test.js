@@ -161,5 +161,17 @@ describe('Trie', () => {
 
       expect(completion.count).to.eql(2);
     })
+
+    it('should not attempt to remove words that are not already in the trie', () => {
+      expect(completion.count).to.eql(3);
+
+      completion.delete('pizzad');
+
+      expect(completion.count).to.eql(3);
+
+      let test = completion.suggest('pizza');
+      expect(test).to.eql(['pizza', 'pizzas']);
+    });
+
   })
 })
