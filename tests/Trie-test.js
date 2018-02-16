@@ -15,7 +15,7 @@ describe('Trie', () => {
   })
 
   it('should store child nodes', () => {
-    expect(completion.children).to.eql({});
+    expect(completion.root).to.exist.and.be.an.instanceOf(Node);
   })
 
   it('should track the number of words in the Trie', () => {
@@ -43,10 +43,10 @@ describe('Trie', () => {
       completion.insert('dog');
       completion.insert('dogs');
 
-      expect(Object.keys(completion.children)).to.eql(['p', 'd']);
-      expect(completion.children['p'].children['i'].children['z']).to.exist;
-      expect(completion.children['p'].children['i'].children['a']).to.exist;
-      expect(completion.children['d'].children['o'].children['g'].endOfWord).to.be.true;
+      expect(Object.keys(completion.root.children)).to.eql(['p', 'd']);
+      expect(completion.root.children['p'].children['i'].children['z']).to.exist;
+      expect(completion.root.children['p'].children['i'].children['a']).to.exist;
+      expect(completion.root.children['d'].children['o'].children['g'].endOfWord).to.be.true;
     })
 
     it('should not add words to the trie if they already exist', () => {
