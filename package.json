@@ -4,12 +4,12 @@
   "description": "A simple prefix trie which may be used for an 'auto-complete' feature",
   "main": "index.js",
   "directories": {
-    "lib": "lib",
+    "src": "src",
     "test": "tests"
   },
   "scripts": {
     "test": "mocha --reporter landing --compilers js:babel-core/register tests",
-    "eslint": "./node_modules/eslint/bin/eslint.js ./lib/*.js",
+    "eslint": "./node_modules/eslint/bin/eslint.js ./src/*.js",
     "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "build": "./node_modules/webpack/bin/webpack.js"
   },
