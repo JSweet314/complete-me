@@ -1,7 +1,7 @@
 # Prefix Trie
 ## By [Jonathan Sweet](https://github.com/JSweet314)
 
-This prefix trie is built to support an autocomplete feature. Intructions and available methods are as follows:
+This prefix trie is built to support an autocomplete feature.
 
 ## Setup
 Install this repository as an npm package.
