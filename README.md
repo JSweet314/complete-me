@@ -36,4 +36,4 @@ Optionally, you may populate the trie with an array of entries
 * `.count()`
   * provides the total number of words in the trie.
 
-[Here](https://github.com/JSweet314/Weatherly/blob/master/lib/Searchbar.js) is a code example of usage within a weather application built with React.js
+Here is a [code example](https://github.com/JSweet314/Weatherly/blob/master/lib/Searchbar.js) of usage within a weather application built with React.js
